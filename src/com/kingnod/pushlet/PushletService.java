@@ -2,7 +2,6 @@ package com.kingnod.pushlet;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -15,32 +14,29 @@ import nl.justobjects.pushlet.core.EventPullSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.google.gson.Gson;
-import com.kingnod.dao.TaskDao;
 import com.kingnod.entity.Chat;
-import com.kingnod.entity.Task;
 import com.kingnod.service.ChatService;
 
 @Component
 public class PushletService extends HttpServlet{
 	
-	@Autowired
-	private TaskDao taskDao;
+	//@Autowired
+	//private TaskDao taskDao;
 	@Autowired
 	private ChatService chatService;
 	{
 		WebApplicationContext	applicationContext = ContextLoaderListener.getCurrentWebApplicationContext();
 		//手动注入dao或者Service
-		taskDao =(TaskDao)applicationContext.getBean("taskDao");
+		//taskDao =(TaskDao)applicationContext.getBean("taskDao");
 		chatService =(ChatService)applicationContext.getBean("chatService");
 	}
 	
-	public  String findAllTask() throws UnsupportedEncodingException{
+	/*public  String findAllTask() throws UnsupportedEncodingException{
 		List<Task> rs = new ArrayList<Task>();
 		List<Task> list= taskDao.findAll();
 		if(list!=null && !list.isEmpty()){
@@ -52,7 +48,7 @@ public class PushletService extends HttpServlet{
 		Gson gson = new Gson();
 		String message = gson.toJson(rs);
 		return URLEncoder.encode(message, "UTF-8");
-	}
+	}*/
 	/**
 	 * 获取所有未读的信息（具体信息的过滤在页面上实现）
 	 * @return
@@ -94,7 +90,7 @@ public class PushletService extends HttpServlet{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Event event = Event.createDataEvent("/zheng/hongwei"); 
+			Event event = Event.createDataEvent("/zheng/hongwei");
             event.setField("mes",message);
             event.setField("time", Calendar.getInstance().getTime().getTime());
             return event;

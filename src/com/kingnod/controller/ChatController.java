@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kingnod.entity.Chat;
+import com.kingnod.entity.User;
 import com.kingnod.service.ChatService;
+import com.kingnod.service.UserService;
+import com.kingnod.util.Users;
 
 @Controller
 @RequestMapping("chat")
@@ -24,6 +27,8 @@ public class ChatController {
 	@Autowired
 	private ChatService chatService;
 	
+	@Autowired
+	private UserService userService;
 	/**
 	 * 进入聊天主页
 	 * @param mv
@@ -35,6 +40,10 @@ public class ChatController {
 	public ModelAndView tochat(ModelAndView mv,HttpServletRequest request,HttpServletResponse response){
 		mv.addObject("userName",request.getRemoteHost());
 		mv.addObject("sendId",(new Date()).getTime());
+		//当前用户信息
+		Long userId = Users.userId();
+		User currentUser = userService.findOne(userId);
+		mv.addObject("user",currentUser);
 		mv.setViewName("view/chat/chatForm");
 		return mv;
 	}

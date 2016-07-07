@@ -32,9 +32,9 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 
+import com.kingnod.dto.NewsDTO;
 import com.kingnod.elasticsearch.EsClientConfig;
 import com.kingnod.entity.News;
-import com.kingnod.entity.NewsDTO;
 
 
 

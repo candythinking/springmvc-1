@@ -15,7 +15,7 @@ public abstract class RedisKeyUtil {
 	
 	
     /**
-     * 拼接tqh key
+     * 拼接cpy key
      * @param keys
      * @return
      */

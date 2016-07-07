@@ -57,7 +57,7 @@ var PL = {
 	STATE_JOINED: 3,
 	STATE_LISTENING: 3,
 	state: 1,
-
+	userId:'',
 /************** START PUBLIC FUNCTIONS  **************/
 
 /** Send heartbeat. */

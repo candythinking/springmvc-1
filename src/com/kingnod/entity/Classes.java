@@ -21,9 +21,9 @@ public class Classes extends CommenEntity {
 	private String code;
 	private String name;
 	//CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH
-	@OneToMany(targetEntity=User.class,cascade={},fetch=FetchType.LAZY)
+	@OneToMany(targetEntity=JcnUser.class,cascade={},fetch=FetchType.LAZY)
 	@Fetch(FetchMode.SUBSELECT)
-	private List<User> list;
+	private List<JcnUser> list;
 	public String getCode() {
 		return code;
 	}
@@ -36,10 +36,10 @@ public class Classes extends CommenEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List<User> getList() {
+	public List<JcnUser> getList() {
 		return list;
 	}
-	public void setList(List<User> list) {
+	public void setList(List<JcnUser> list) {
 		this.list = list;
 	}
 	

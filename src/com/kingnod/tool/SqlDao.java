@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.repository.Repository;
 
 import com.kingnod.entity.CommenEntity;
-import com.kingnod.entity.User;
 
 public interface SqlDao extends Repository<CommenEntity,Long>{
 	/**
@@ -19,5 +18,5 @@ public interface SqlDao extends Repository<CommenEntity,Long>{
 	 * @param Id
 	 * @return
 	 */
-	public User findOne(Long Id);
+	//public JcnUser findOne(Long Id);
 }

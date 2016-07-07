@@ -16,7 +16,6 @@
 	        <li class="active">${action.typeName }</li>
 	    </ul>
 		<form id="chatForm" class="form-horizontal" method="post">
-			<input type="hidden" name="sendId" id="sendId" value="${sendId}"/>
 			<!--消息类型  -->
 			<input type="hidden" name="chatType" id="chatType" value="allTOall"/>
 			<!--接收者ID 如果进入的是房间此处是房间ID,如果是私聊此处是用户ID  -->
@@ -49,7 +48,8 @@
 		<script type="text/javascript"> 
 			$("#content").focus();
 			//pushlet组件
-            //PL._init();   
+            //PL._init();
+			Pl.userId="${user.id}";
             PL.joinListen('/zheng/hongwei');
             function onData(event) {
             	//event 获取的内容是 int  long  或者 String 类型的，所以如果要从控制层传回一个对象需要在控制层将对象转换为json放入event中；
@@ -57,15 +57,15 @@
             	var time = event.get("time");
             	var chatType = $("#chatType").val();//消息类型
             	var receiveId = $("#receiveId").val();//接收者Id
-            	var sendId = $("#sendId").val();//发送者Id
+            	var sendName = "${user.name}";//发送者Id
                 $.each(data,function(i,chat){
                 	if(chat.sendId !=sendId){//不发送给自己
                 		if(chatType !="allTOall"){//发送给指定房间的房间 或者个人
                     		if(chat.receive == receiveId){
-                    			$("#bank").append("<div class='content-line'>"+"<strong>游客"+chat.sendId+"：</strong>"+chat.content+"</div>");
+                    			$("#bank").append("<div class='content-line'>"+"<strong>"+chat.sendName+"：</strong>"+chat.content+"</div>");
                     		}
                     	}else{
-                    		$("#bank").append("<div class='content-line'>"+"<strong>游客"+chat.sendId+"：</strong>"+chat.content+"</div>");
+                    		$("#bank").append("<div class='content-line'>"+"<strong>"+chat.sendName+"：</strong>"+chat.content+"</div>");
                     	}
                     	
                 	}

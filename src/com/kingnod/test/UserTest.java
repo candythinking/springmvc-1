@@ -1,4 +1,4 @@
-package com.kingnod.test;
+/*package com.kingnod.test;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
-import com.kingnod.entity.User;
+import com.kingnod.entity.JcnUser;
 import com.kingnod.service.UserService;
 
 //@TransactionConfiguration(defaultRollback=false)
@@ -44,7 +44,7 @@ public class UserTest{//extends SpringTransactionalTestCase
 	}
 	@Test
 	public void sf(){
-		List<User> list =	userService.findAllUser(1000000L);
+		List<JcnUser> list =	userService.findAllUser(1000000L);
 		logger.info("*****************"+list.size());
 	}
 	@After
@@ -53,3 +53,4 @@ public class UserTest{//extends SpringTransactionalTestCase
 	}
 
 }
+*/

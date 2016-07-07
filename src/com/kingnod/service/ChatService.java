@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kingnod.dao.ChatDao;
 import com.kingnod.entity.Chat;
+import com.kingnod.util.Users;
 
 @Service("chatService")
 @Transactional(readOnly=true)
@@ -24,6 +25,7 @@ public class ChatService {
 	 */
 	@Transactional(readOnly=false)
 	public Chat saveChat(Chat chat){
+		chat.setSendId(Users.userId());
 		chat.setReadFlag("N");
 		chat.setSendDate(new Date());
 		return chatDao.save(chat);

@@ -20,7 +20,8 @@ public abstract class CommenEntity extends IdEntity{
 	private static final long serialVersionUID = 1L;
 
 	@Column(name="create_date")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	private Date createDate;
 	
 	@Column(name="last_update_date")

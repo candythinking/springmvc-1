@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kingnod.entity.Task;
-import com.kingnod.entity.User;
+import com.kingnod.entity.JcnUser;
 import com.kingnod.service.TaskService;
 import com.kingnod.tool.Setting.ActionType;
 
@@ -47,7 +47,7 @@ public class TaskController {
 	@RequestMapping(value="create",method=RequestMethod.POST)
 	public ModelAndView create(ModelAndView mv,Task task,RedirectAttributes redirectAttributes){
 		task.setLastUpdateDate(new Date());
-		User user = new User();
+		JcnUser user = new JcnUser();
 		user.setId(4L);
 		task.setUser(user);
 		taskService.save(task);

@@ -8,7 +8,6 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
-import com.kingnod.entity.User;
 import com.kingnod.tool.SqlDao;
 
 @Service
@@ -35,10 +34,10 @@ public class SqlDaoImpl implements SqlDao {
 		return list;
 	}
 
-	public User findOne(Long id){
+	/*public JcnUser findOne(Long id){
 		EntityManager target = null;
 		target = em.getEntityManagerFactory().createEntityManager();
-		User user = target.find(User.class, id);
+		JcnUser user = target.find(JcnUser.class, id);
 		return user;
-	}
+	}*/
 }

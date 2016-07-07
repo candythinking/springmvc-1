@@ -5,6 +5,7 @@
 		<pattern>/cxf/*</pattern>
 		<pattern>/api/*</pattern>
 		<pattern>/javasimon/*</pattern>
+		<pattern>/login</pattern>
 	</excludes>
 	
 	<decorator name="default" page="default.jsp">

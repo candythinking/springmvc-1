@@ -34,7 +34,7 @@ public class Task extends CommenEntity {
 	 */
 	@ManyToOne(cascade={CascadeType.REFRESH,CascadeType.MERGE},fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id",referencedColumnName="id")
-	private User user;
+	private JcnUser user;
 	
 	/**
 	 * 任务名称
@@ -59,11 +59,11 @@ public class Task extends CommenEntity {
 	private DepType dep;
 	
 	
-	public User getUser() {
+	public JcnUser getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(JcnUser user) {
 		this.user = user;
 	}
 

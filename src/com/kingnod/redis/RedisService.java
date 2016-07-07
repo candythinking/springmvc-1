@@ -8,10 +8,9 @@ import java.util.Map;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.kingnod.entity.User;
+import com.kingnod.entity.JcnUser;
 import com.kingnod.tool.RedisKeyUtil;
 
 @Service
@@ -30,7 +29,7 @@ public class RedisService {
 	private RedisTemplate<String,String> RedisStringTemplate;
 	
 	@Autowired
-	private RedisTemplate<String,User> redisObjectTemplate;
+	private RedisTemplate<String,JcnUser> redisObjectTemplate;
 	
 	public List<Long> putUserId(Long userId) {
 		System.out.println("***tem*"+redisLongTemplate);
@@ -50,7 +49,7 @@ public class RedisService {
 	@SuppressWarnings("unchecked")
 	public Map<Object, Object> findValue(String key){
 		//RedisStringTemplate.opsForValue().set(key,key);
-		User user = new User();
+		JcnUser user = new JcnUser();
 		user.setCreateDate(new Date());
 		user.setLastUpdateDate(new Date());
 		user.setName("lulu");

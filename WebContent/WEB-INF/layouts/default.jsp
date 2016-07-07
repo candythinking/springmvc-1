@@ -41,9 +41,9 @@
                         <a href="#" class="x-navigation-control"></a>
                     </li>
                     <li class="xn-profile">
-                        <a href="#" class="profile-mini">
+                       <%--  <a href="#" class="profile-mini">
                             <img src="${ctx}/static/assets/images/users/avatar.jpg" alt="John Doe"/>
-                        </a>
+                        </a> --%>
                         <div class="profile">
                             <div class="profile-image">
                                 <img src="${ctx}/static/assets/images/users/avatar.jpg" alt="John Doe"/>
@@ -53,7 +53,7 @@
                                 <div class="profile-data-title">社区管理员</div>
                             </div>
                             <div class="profile-controls">
-                                <a href="pages-profile.html" class="profile-control-left"><span class="fa fa-info"></span></a>
+                                <a href="${ctx}/logout" class="profile-control-left"><span class="fa fa-info"></span></a>
                                 <a href="pages-messages.html" class="profile-control-right"><span class="fa fa-envelope"></span></a>
                             </div>
                         </div>                                                                        
@@ -231,9 +231,9 @@
                     </li>   
                     <!-- END SEARCH -->
                     <!-- SIGN OUT -->
-                    <li class="xn-icon-button pull-right">
-                        <a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>                        
-                    </li> 
+                   <%--  <li class="xn-icon-button pull-right">
+                        <a href="${ctx}/logout" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span>注销</a>                        
+                    </li>  --%>
                     <!-- END SIGN OUT -->
                     <!-- MESSAGES -->
                     <li class="xn-icon-button pull-right">
@@ -334,23 +334,23 @@
 		</div>
 		<!-- END PAGE CONTAINER -->
         <!-- MESSAGE BOX-->
-        <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
+        <%-- <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout" style="margin:0 auto;width:500px;">
             <div class="mb-container">
                 <div class="mb-middle">
-                    <div class="mb-title"><span class="fa fa-sign-out"></span> Log <strong>Out</strong> ?</div>
+                    <div class="mb-title"><span class="fa fa-sign-out"></span><strong>注销当前用户?</strong></div>
                     <div class="mb-content">
-                        <p>Are you sure you want to log out?</p>                    
-                        <p>Press No if youwant to continue work. Press Yes to logout current user.</p>
+                        <p>您确定要注销当前用户吗?</p>                    
+                        <p>点击否取消退出.点击是确认注销.</p>
                     </div>
                     <div class="mb-footer">
                         <div class="pull-right">
-                            <a href="pages-login.html" class="btn btn-success btn-lg">Yes</a>
-                            <button class="btn btn-default btn-lg mb-control-close">No</button>
+                            <a href="${ctx}/logout" class="btn btn-success btn-lg">是</a>
+                            <button class="btn btn-default btn-lg mb-control-close">否</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --%>
         <!-- END MESSAGE BOX-->
 
         <!-- START PRELOADS -->

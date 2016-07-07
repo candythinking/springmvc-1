@@ -8,9 +8,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.kingnod.entity.Chat;
-import com.kingnod.entity.Classes;
-import com.kingnod.entity.Task;
-import com.kingnod.entity.User;
 
 /**
  * @author zhenghongwei

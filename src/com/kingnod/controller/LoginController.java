@@ -4,27 +4,28 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,25 +37,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.kingnod.dao.SqlDaoImpl;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kingnod.entity.Classes;
-import com.kingnod.entity.User;
+import com.kingnod.entity.JcnUser;
 import com.kingnod.redis.RedisService;
-import com.kingnod.service.AccountService;
-import com.kingnod.service.UserService;
+import com.kingnod.service.JcnUserService;
 import com.kingnod.tool.SqlDao;
 /**
  * 用户登陆控制
  * @author zhenghongwei
  */
 @Controller("loginController")
-@RequestMapping("user/**")
 public class LoginController {
-	
-	@Resource(name="accountService")
-	private AccountService accountService;
+	private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+	//@Resource(name="accountService")
+	//private AccountService accountService;
 	
 	@Value("#{clientInfo['mapKey']}")
 	//@Value("#{clientInfo.mapKey}")
@@ -62,7 +60,7 @@ public class LoginController {
 	
 	//@Resource(name="UserService")
 	@Autowired
-	private UserService userService;
+	private JcnUserService jcnUserService;
 	
 	@Autowired
 	private SqlDao sqlDao;
@@ -76,30 +74,37 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value="login",method=RequestMethod.GET)
-	public ModelAndView loginGet(HttpSession httpSession){
-		User user = (User)httpSession.getAttribute("user");
-		if(user!=null){
-			System.out.println("session的值"+user.getName()+"***"+user.getPassword());
-		}
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("view/login");
+	public ModelAndView loginGet(ModelAndView mv){
+		Subject s=SecurityUtils.getSubject();
+		if(s.isRemembered()||s.isAuthenticated()) {
+        	//return "redirect:main";
+			mv.setViewName("redirect:chat/index");
+        }
+		mv.setViewName("/view/login");
 		return mv;
 	}
 	
+	 @RequestMapping(value="login",method=RequestMethod.POST)
+	    public ModelAndView checkLogin(@RequestParam(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM) String userName,ModelAndView mv){
+		 logger.info("*****登录参数*****"+userName);   
+		 mv.addObject(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM,userName);
+	     mv.setViewName("/chat/index");
+	     return mv;
+	    }
 	/**
-	 * 提交登陆信息
+	 * 登录校验
 	 * @param userName 用户名
 	 * @param password 密码
 	 * @return 重新进入登录页面
 	 */
-	@RequestMapping(value="login",method=RequestMethod.POST)
+	@RequestMapping(value="register",method=RequestMethod.POST)
 	public ModelAndView loginPost(@RequestParam(value="userName",required=false) String userName,
 			@RequestParam(value="password",required=false) String password,@RequestParam("file") MultipartFile file,
 			HttpSession httpSession){
-		accountService.save(userName, password);
+		//accountService.save(userName, password);
 		ModelAndView mv = new ModelAndView();
 		System.out.println("附件名称"+file.getOriginalFilename());
-		User user = new User();
+		JcnUser user = new JcnUser();
 		user.setName(userName);
 		user.setPassword(password);
 		httpSession.setAttribute("user", user);
@@ -121,10 +126,10 @@ public class LoginController {
 	}
 	@RequestMapping(value="all/{id}")
 	@ResponseBody
-	public List<User> allUser(@PathVariable(value="id") Long id){
+	public List<JcnUser> allUser(@PathVariable(value="id") Long id){
 		
-		List<User> all = userService.findAllUser(id);
-		for(User user:all){
+		List<JcnUser> all = jcnUserService.findAllUser(id);
+		for(JcnUser user:all){
 			System.out.println("**"+user.getName()+"****"+user.getPassword());
 		}
 		return all;
@@ -132,13 +137,13 @@ public class LoginController {
 	
 	@RequestMapping(value="save")
 	@ResponseBody
-	public User save(){
-		User us = new User();
+	public JcnUser save(){
+		JcnUser us = new JcnUser();
 		us.setPassword("qqq"+(int)(Math.random()*100));
 		us.setName("dongdong"+(int)(Math.random()*1000));
 		us.setCreateDate(new Date());
 		us.setLastUpdateDate(new Date());
-		return	userService.save(us);
+		return	jcnUserService.save(us);
 	}
 	/**
 	 * 使用sring 分页查询 (标准查询)
@@ -149,17 +154,17 @@ public class LoginController {
 	 */
 	@RequestMapping(value="page",method=RequestMethod.POST)
 	@ResponseBody
-	public List<User> page(@RequestParam(value="pageNo",defaultValue="0")Integer pageNo,@RequestParam(value="pageSize",defaultValue="10")Integer pageSize,@RequestBody final User user){
-		List<User> list = new ArrayList<User>();
+	public List<JcnUser> page(@RequestParam(value="pageNo",defaultValue="0")Integer pageNo,@RequestParam(value="pageSize",defaultValue="10")Integer pageSize,@RequestBody final JcnUser user){
+		List<JcnUser> list = new ArrayList<JcnUser>();
 		list.add(user);
 		System.out.println("********"+user.getId()+"*****"+user.getCreateDate()+"****");
 		List<Sort.Order> sort = new ArrayList<Sort.Order>();
 		Sort.Order order = new Sort.Order(Sort.Direction.DESC,"id");
 		sort.add(order);
 		 PageRequest page  = new PageRequest(pageNo,pageSize,new Sort(sort));
-		 Specification<User> sp = new Specification<User>() {
+		 Specification<JcnUser> sp = new Specification<JcnUser>() {
 			@Override
-			public Predicate toPredicate(Root<User> root,CriteriaQuery<?> cq, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<JcnUser> root,CriteriaQuery<?> cq, CriteriaBuilder cb) {
 				List<Predicate> predicates = new ArrayList<Predicate>();
 				predicates.add(cb.le(root.<Long>get("id"),user.getId()));
 				predicates.add(cb.lessThanOrEqualTo(root.<Date>get("createDate"),user.getCreateDate()));
@@ -167,7 +172,7 @@ public class LoginController {
 			}
 		};
 		
-		Page<User> rs = userService.pageUser(sp,page);
+		Page<JcnUser> rs = jcnUserService.pageUser(sp,page);
 		return rs.getContent();
 	}
 	/**
@@ -177,12 +182,12 @@ public class LoginController {
 	 */
 	@RequestMapping(value="sql",method=RequestMethod.GET)
 	@ResponseBody
-	public List<User> findByCriteria(@RequestParam(value="endDate",required=false)Date endDate){
-		List<User> list = new ArrayList<User>();
+	public List<JcnUser> findByCriteria(@RequestParam(value="endDate",required=false)Date endDate){
+		List<JcnUser> list = new ArrayList<JcnUser>();
 		List<Object[]> obs = sqlDao.findAll("SELECT a.id,a.create_date,a.last_update_date,a.user_name,a.password from user a ORDER BY a.id asc");
 		if(obs!=null && !obs.isEmpty()){
 			for(Object[] ob:obs){
-				User user = new User();
+				JcnUser user = new JcnUser();
 				user.setId(ob[0]!=null?Long.parseLong(ob[0].toString()):null);
 				try {
 					user.setCreateDate(ob[1]!=null?DateFormat.getDateInstance().parse(ob[1].toString()):null);
@@ -200,11 +205,11 @@ public class LoginController {
 	}
 	@RequestMapping(value="one/{id}")
 	@ResponseBody
-	public User findOne(@PathVariable(value="id") Long id,@RequestParam(value="categroy",required=true) String categroy){
+	public JcnUser findOne(@PathVariable(value="id") Long id,@RequestParam(value="categroy",required=true) String categroy){
 		if("in".equals(categroy)){
-			return userService.findOne(id);
+			return jcnUserService.findOne(id);
 		}else{
-			return userService.updateOne(id);
+			return jcnUserService.updateOne(id);
 		}
 	}
 	@RequestMapping(value="redis/{id}")
@@ -234,7 +239,7 @@ public class LoginController {
 	@RequestMapping(value="save/classes")
 	@ResponseBody
 	public Classes oneToManySave(){
-		return userService.saveClasses();
+		return jcnUserService.saveClasses();
 	//	System.out.println("end");
 //		return user;
 	}
@@ -243,7 +248,7 @@ public class LoginController {
 	public Classes findOneClasses(@PathVariable(value="id")Long id){
 		ModelAndView mv = new ModelAndView();
 		//Map<String,Object> map = new HashMap<String,Object>();
-		Classes c = userService.findOneClasses(id);
+		Classes c = jcnUserService.findOneClasses(id);
 		//List<User> list = c.getList();
 		//System.out.println("*******"+list.size());
 		//userService.de(id);
