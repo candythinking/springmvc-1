@@ -1,2 +1,2 @@
-本模板采用springmvc+hibernate+mysql。欢迎有志之士添砖加瓦，
-目前已经集成的技术有搜索引擎elasticsearch，缓存数据库redis,Comet 框架pushlet,前端框架bootstrap 
+鏈ā鏉块噰鐢╯pringmvc+hibernate+mysql銆傛杩庢湁蹇椾箣澹坊鐮栧姞鐡︼紝
+鐩墠宸茬粡闆嗘垚鐨勬妧鏈湁鎼滅储寮曟搸elasticsearch锛岀紦瀛樻暟鎹簱redis,Comet 妗嗘灦pushlet,鍓嶇妗嗘灦bootstrap 
